@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace DotNetGroupTalk
 {
@@ -28,8 +29,14 @@ namespace DotNetGroupTalk
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            
+            app.Use(async (context,next)=>{
+                 context.Response.Headers.Add("Middle","Hello MiddleWare");
+                await next.Invoke();
+            });
             app.UseStaticFiles();
+
+            
         }
     }
 
