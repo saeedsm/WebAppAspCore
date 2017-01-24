@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
+using DotNetGroupTalk.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DotNetGroupTalk
 {
@@ -22,7 +24,12 @@ namespace DotNetGroupTalk
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ProductContext>(opt=>{
+                var connectstring = Configuration.GetConnectionString("DefaultConnection");
+                opt.UseSqlServer(connectstring);
+            });
             services.AddMvc();
+
         }
 
         public void Configure(IApplicationBuilder app,IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -32,6 +39,8 @@ namespace DotNetGroupTalk
             
             if(env.IsDevelopment()){
                 app.UseDeveloperExceptionPage();
+                Seed.Seedit(app.ApplicationServices);
+
             }
 
             app.UseStaticFiles();
