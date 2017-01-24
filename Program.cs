@@ -8,10 +8,10 @@ namespace DotNetGroupTalk
     {
         public static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                    .AddCommandLine(args)
-                    .AddEnvironmentVariables(prefix:"ASPNETCORE_")
-                    .Build();
+            // var config = new ConfigurationBuilder()
+            //         .AddCommandLine(args)
+            //         .AddEnvironmentVariables(prefix:"ASPNETCORE_")
+            //         .Build();
             var host = new WebHostBuilder()
                     .UseUrls("http://*:5000")
                     .UseKestrel()

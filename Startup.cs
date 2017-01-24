@@ -22,21 +22,27 @@ namespace DotNetGroupTalk
 
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app,IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             
-            app.Use(async (context,next)=>{
-                 context.Response.Headers.Add("Middle","Hello MiddleWare");
-                await next.Invoke();
-            });
+            if(env.IsDevelopment()){
+                app.UseDeveloperExceptionPage();
+            }
+
             app.UseStaticFiles();
 
-            
+
+            app.UseMvc(
+                routes=>{
+                    routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                }
+            );
+
         }
     }
 
